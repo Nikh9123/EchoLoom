@@ -6,12 +6,14 @@
 .pnp.js
 .yarn/install-state.gz
 .env
+.env.development.local
 
 # testing
 /coverage
 
 # next.js
 /.next/
+/.vercel/
 /out/
 
 # production
@@ -35,3 +37,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
