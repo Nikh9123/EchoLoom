@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod"
-
+import axios from "axios";
 import {
   Dialog,
   DialogContent,
@@ -24,6 +24,10 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { UploadButton } from "@uploadthing/react";
+import { FileUp } from "lucide-react";
+import FileUpload from "@/components/file-upload";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -43,11 +47,18 @@ export const InitialModel = () => {
       imageUrl: "",
     },
   });
-
+  const router = useRouter() ;
   const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+    try {
+      await axios.post("/api/servers", values);
+      form.reset(); //this will reset the form and the default values
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -65,7 +76,22 @@ export const InitialModel = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
             <div className="space-y-8 px-6">
               <div className="flex items-center justify-center text-center">
-                TODO: add image upload
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    console.log("fsd", field),
+                    <FormItem>
+                      <FormControl>
+                        <FileUpload
+                          endpoint="serverImage"
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </div>
               <FormField
                 control={form.control}
@@ -87,9 +113,9 @@ export const InitialModel = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button disabled={isLoading} variant={"primary"}>
-                Create 1:44:00
+                Create
               </Button>
-              
+
             </DialogFooter>
           </form>
         </Form>

@@ -17,4 +17,6 @@ const config: Config = {
   },
   plugins: [],
 }
+import { withUt } from "uploadthing/tw";
+ 
 export default config
