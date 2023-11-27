@@ -14,6 +14,7 @@ export async function POST(req: Request) {
 			return new NextResponse("unauthrized", { status: 401 });
 		}
 
+		//1. create a server
 		const sever = await db.server.create({
 			data: {
 				profileId: profile.id,
@@ -38,6 +39,8 @@ export async function POST(req: Request) {
 				},
 			},
 		});
+
+		
     console.log("sever : ", sever);
     return NextResponse.json(sever);
 
