@@ -28,7 +28,7 @@ import { UploadButton } from "@uploadthing/react";
 import { FileUp } from "lucide-react";
 import FileUpload from "@/components/file-upload";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useModal } from "@/hooks/use-modal-store";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -40,13 +40,13 @@ const formSchema = z.object({
 
 })
 
-export const InitialModel = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const router = useRouter();
+export const CreateServerModel = () => {
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const { isOpen, onClose, onOpen, type } = useModal();
+
+  const isModelOpen = isOpen && type === "createServer";
+
+
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -55,6 +55,7 @@ export const InitialModel = () => {
       imageUrl: "",
     },
   });
+  const router = useRouter();
   const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -62,14 +63,16 @@ export const InitialModel = () => {
       await axios.post("/api/servers", values);
       form.reset(); //this will reset the form and the default values
       router.refresh();
-      window.location.reload();
     } catch (error) {
       console.log(error)
     }
   }
-  if (!isMounted) return null;
+  const handleClose = () => {
+    onClose();
+    form.reset();
+  }
   return (
-    <Dialog open={true} >
+    <Dialog open={isModelOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden ">
         <DialogHeader className="pt-6 px-6 pb-6">
           <DialogTitle className="text-2xl text-center font-bold">
