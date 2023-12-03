@@ -1,9 +1,10 @@
 import React from 'react'
 import { redirect } from 'next/navigation';
+import { ChannelType } from '@prisma/client';
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db';
-import { ChannelType } from '@prisma/client';
+import ServerHeader from './server-header';
 
 interface ServerSidebarProps {
   serverId: string
@@ -46,18 +47,21 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 
   //extract the members no need to show ourselve in members list
   const members = server?.members.filter((member) => member.profileId !== profile.id);
-  
-  if(!server){
+
+  if (!server) {
     return redirect("/");
   }
 
   //find our role 
+  const role = server?.members.find((member) => member.profileId === profile.id)?.role;
+
+  // console.log("jello", role);
 
 
   return (
-    <div className=''>
-      {serverId}
-
+    <div className=' flex flex-col h-full text-primary
+    w-full dark:bg-[rgb(43,45,49)] bg-[#F2F3F5]'>
+      <ServerHeader server={server} role={role} />
     </div>
   )
 }
