@@ -4,7 +4,7 @@ type Props = {}
 
 const ServerIdPage = (props: Props) => {
   return (
-    <div>ServerPAGE</div>
+    <div>ServerPAGE ID</div>
   )
 }
 

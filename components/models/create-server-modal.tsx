@@ -55,6 +55,7 @@ export const CreateServerModel = () => {
       imageUrl: "",
     },
   });
+  
   const router = useRouter();
   const isLoading = form.formState.isSubmitting
 
@@ -63,6 +64,7 @@ export const CreateServerModel = () => {
       await axios.post("/api/servers", values);
       form.reset(); //this will reset the form and the default values
       router.refresh();
+      onClose();
     } catch (error) {
       console.log(error)
     }

@@ -11,7 +11,7 @@ export const ModalProvider = () => {
   }, []);
 
   //this is to prevent the modal from rendering on the server
-  if(!isMounted) return null;
+  if (!isMounted) return null;
 
   return (
     <>
