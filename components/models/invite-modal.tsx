@@ -11,7 +11,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { CheckCheck, CheckCheckIcon, Copy, RefreshCw, Share, Share2 } from "lucide-react";
+import { CheckCheckIcon, Copy, RefreshCw, Share, Share2 } from "lucide-react";
 import { useOrigin } from "@/hooks/use-origin";
 import { useState } from "react";
 import axios from "axios";
@@ -44,7 +44,7 @@ export const InviteModal = () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.patch(`/api/servers/${server?.id}/invite-code}`);
+      const response = await axios.patch(`/api/servers/${server?.id}/invite-code`);
 
       onOpen("invite", { server: response.data })
 
@@ -88,6 +88,7 @@ export const InviteModal = () => {
             variant="link"
             size={"sm"}
             disabled={isLoading}
+            onClick={onNew}
           >
             Generate new link
             <RefreshCw className="w-4 h-4 text-zinc-600 ml-2" 

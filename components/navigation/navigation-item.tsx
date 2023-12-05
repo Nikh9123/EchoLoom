@@ -15,11 +15,9 @@ interface NavigationItemProps {
 export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
   const params = useParams();
   const router = useRouter();
-  console.log("params", params, "router", router);
 
   const onClick = () => {
     router.push(`/servers/${id}`);
-    console.log("clicked");
   }
 
   return (
