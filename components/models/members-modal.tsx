@@ -62,9 +62,36 @@ export const MembersModal = () => {
 
   const { server } = data as { server: ServerWithMembersWithProfiles };
 
+  //* kick function kick the user from databse
+  const onKick = async (memberId: string) => {
+
+    try {
+      setLoadingId(memberId);
+
+      const url = qs.stringifyUrl({
+        url: `/api/members/${memberId}`,
+        query: {
+          serverId: server?.id
+        }
+      })
+
+      const response = await axios.delete(url);
+
+      router.refresh();
+      onOpen("members", { server: response.data });
+    }
+    catch (err) {
+      console.log("🚫 error from components/modal/member-modal.tsx", err);
+    }
+    finally {
+      setLoadingId("");
+    }
+  }
+
   const onRoleChange = async (memberId: string, role: MemberRole) => {
     try {
       setLoadingId(memberId);
+
       const url = qs.stringifyUrl({
         url: `/api/members/${memberId}`,
         query: {
@@ -119,8 +146,8 @@ export const MembersModal = () => {
                   (
                     <div className="ml-auto">
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <MoreVertical className="h-4 v-4 text-zinc-500"
+                        <DropdownMenuTrigger>
+                          <MoreVertical className="h-4 v-4 text-zinc-500 "
 
                           />
                         </DropdownMenuTrigger>
@@ -129,13 +156,13 @@ export const MembersModal = () => {
                             <DropdownMenuSubTrigger
                               className="flex items-center"
                             >
-                              <ShieldQuestion className="h-4 w-4 mr-2" />
+                              <ShieldQuestion className="h-4 w-4 mr-2 " />
                               <span>Role</span>
                             </DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
                               <DropdownMenuSubContent>
                                 <DropdownMenuItem
-                                  onClick={() => onRoleChange(member.id,"GUEST")}>
+                                  onClick={() => onRoleChange(member.id, "GUEST")}>
                                   <User className="h-4 w-4 mr-2" />
                                   GUEST
                                   {
@@ -147,7 +174,7 @@ export const MembersModal = () => {
                                   }
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                onClick={() => onRoleChange(member.id,"MODERATOR")}
+                                  onClick={() => onRoleChange(member.id, "MODERATOR")}
                                 >
                                   <ShieldCheck className="h-4 w-4 mr-2" />
                                   MODERATOR
@@ -163,7 +190,9 @@ export const MembersModal = () => {
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onKick(member.id)}
+                          >
                             <Gavel className="w-4 h-4 mr-2" />
                             KICK
                           </DropdownMenuItem>
