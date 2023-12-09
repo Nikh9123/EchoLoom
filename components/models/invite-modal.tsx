@@ -20,6 +20,8 @@ import axios from "axios";
 export const InviteModal = () => {
 
   const { isOpen, onClose, onOpen, type, data } = useModal();
+  
+// The useOrigin() hook in Next.js is used to retrieve the complete origin URL of the current page
   const origin = useOrigin();
 
   const isModelOpen = isOpen && type === "invite";

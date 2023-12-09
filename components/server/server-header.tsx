@@ -38,8 +38,8 @@ interface ServerHeaderProps {
 const ServerHeader = ({ server, role }: ServerHeaderProps) => {
   const {onOpen} = useModal();
   const isAdmin = role === MemberRole.ADMIN ;
-  const isModerator = isAdmin || MemberRole.MODERATOR ;
-  //* A Admin is bydefault a moderator
+  const isModerator = isAdmin || role === MemberRole.MODERATOR ;
+  //* A Admin is by default a moderator
   
   return (
     <DropdownMenu>
@@ -68,9 +68,11 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             />
           </DropdownMenuItem>
         )}
+
         {isAdmin && (
           <DropdownMenuItem 
           className='px-3 py-3 cursor-pointer'
+          onClick={() => onOpen("editServer", {server})}
           >
             Server Settings
             <Settings className="h-4 w-4 ml-auto "/>
@@ -80,11 +82,13 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         {isAdmin && (
           <DropdownMenuItem 
           className='px-3 py-3 cursor-pointer'
+          onClick={()=> onOpen("members", {server})}
           >
             Manage Members
             <Users className="h-4 w-4 ml-auto "/>
           </DropdownMenuItem>
         )}
+
         {isModerator && (
           <DropdownMenuItem 
           className='px-3 py-3 cursor-pointer'
@@ -93,10 +97,12 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             <PlusCircle className="h-4 w-4 ml-auto "/>
           </DropdownMenuItem>
         )}
+
         {isModerator && (
           <DropdownMenuSeparator/>
 
         )}
+
         {isAdmin && (
           <DropdownMenuItem 
           className='text-rose-700 px-3 py-3 cursor-pointer'
@@ -105,6 +111,7 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             <Trash className=" h-4 w-4 ml-auto "/>
           </DropdownMenuItem>
         )}
+
         {!isAdmin && (
           <DropdownMenuItem 
           className='text-rose-700 px-3 py-3 cursor-pointer'
@@ -113,6 +120,7 @@ const ServerHeader = ({ server, role }: ServerHeaderProps) => {
             <LogOut className=" h-4 w-4 ml-auto "/>
           </DropdownMenuItem>
         )}
+
       </DropdownMenuContent>
     </DropdownMenu>
   )

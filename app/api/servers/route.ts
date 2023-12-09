@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import { NextResponse } from "next/server";
 
 import { currentProfile } from "@/lib/current-profile";
-import { db } from "@/lib/db";
+import { db} from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 
 export async function POST(req: Request) {
@@ -23,11 +23,11 @@ export async function POST(req: Request) {
 				inviteCode: uuidv4(),
 				channels: {
 					create: [
-            { 
-              name: "general", 
-              profileId: profile.id 
-            }
-          ],
+						{
+							name: "general",
+							profileId: profile.id,
+						},
+					],
 				},
 				members: {
 					create: [
@@ -40,10 +40,8 @@ export async function POST(req: Request) {
 			},
 		});
 
-		
-    console.log("sever : ", sever);
-    return NextResponse.json(sever);
-
+		console.log("sever : ", sever);
+		return NextResponse.json(sever);
 	} catch (error) {
 		console.log("Error from api/servers/POST : ", error);
 		return new NextResponse("Internal error", { status: 500 });
