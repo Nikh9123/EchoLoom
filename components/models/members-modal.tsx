@@ -10,7 +10,7 @@ import {
 import { useModal } from "@/hooks/use-modal-store";
 import { ServerWithMembersWithProfiles } from "@/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import UserAvatar from "@/components/user-avatar";
+import {UserAvatar} from "@/components/user-avatar";
 
 
 
@@ -44,7 +44,7 @@ export const MembersModal = () => {
               <div className="flex items-center gap-x-2 mb-6"
                 key={member.id}
               >
-                <UserAvatar/>
+                <UserAvatar src={member.profile.imageUrl}/>
               </div>
             ))
           }
