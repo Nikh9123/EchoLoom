@@ -1,7 +1,14 @@
 import { Server } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModelType = "createServer" | "invite" | "editServer" | "members" | "createChannel" | "leaveServer";
+export type ModelType =
+	| "createServer"
+	| "invite"
+	| "editServer"
+	| "members"
+	| "createChannel"
+	| "leaveServer"
+	| "deleteServer";
 
 interface ModalData {
 	server?: Server;
@@ -14,7 +21,6 @@ interface ModelStore {
 	onOpen: (type: ModelType, data?: ModalData) => void;
 	onClose: () => void;
 }
-
 
 //this is a custom hook that will be used to open and close the modal
 export const useModal = create<ModelStore>((set) => ({
