@@ -13,7 +13,7 @@ interface ServerSectionProps {
   label: string;
   role?: MemberRole;
   sectionType: "channels" | "members";
-  channelType: ChannelType;
+  channelType?: ChannelType;
   server?: ServerWithMembersWithProfiles;
 }
 
@@ -25,7 +25,7 @@ const ServerSection = ({
   server
 }: ServerSectionProps) => {
 
-  const {onOpen} =  useModal();
+  const { onOpen } = useModal();
 
   return (
     <div className='flex justify-between items-center py-2'>
@@ -39,27 +39,27 @@ const ServerSection = ({
             <button className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400
             dark:hover:text-zinc-300 transition
             '
-            onClick={()=>onOpen("createChannel")}
+              onClick={() => onOpen("createChannel")}
             >
-              <Plus className="h-4 w-4" size={16} 
+              <Plus className="h-4 w-4" size={16}
               />
             </button>
           </ActionToolTip>
         )
       }
       {
-      role === MemberRole.ADMIN && sectionType==="members" && (
-        <ActionToolTip label='Create Channel' side='top'>
+        role === MemberRole.ADMIN && sectionType === "members" && (
+          <ActionToolTip label='Manage Members' side='top'>
             <button className='text-zinc-500 hover:text-zinc-600 dark:text-zinc-400
             dark:hover:text-zinc-300 transition
             '
-            onClick={()=>onOpen("createChannel")}
+              onClick={() => onOpen("members", { server })}
             >
-              <Settings className="h-4 w-4" size={16} 
+              <Settings className="h-4 w-4" size={16}
               />
             </button>
           </ActionToolTip>
-      )
+        )
       }
     </div>
   )
