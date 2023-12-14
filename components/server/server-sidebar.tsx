@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import ServerSearch from './server-search';
 import { Separator } from '@/components/ui/separator';
 import ServerSection from './server-section';
+import ServerChannel from './server-channel';
 
 interface ServerSidebarProps {
   serverId: string
@@ -33,7 +34,7 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 
   if (!profile) {
     redirect("/");
-  } 
+  }
 
   const server = await db.server.findUnique({
     where: {
@@ -113,35 +114,38 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
                 ))
               },
               {
-                label :"Members",
-                type:"member",
-                data : members?.map((member)=>({
-                  id : member.id,
-                  name : member.profile.name,
-                  icon : roleIconMap[member.role]
+                label: "Members",
+                type: "member",
+                data: members?.map((member) => ({
+                  id: member.id,
+                  name: member.profile.name,
+                  icon: roleIconMap[member.role]
                 }))
               }
             ]} />
         </div>
-        <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-1'/>
+        <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-1' />
         {//textChannels?.length is now a boolean
-          !!textChannels?.length  && (
+          !!textChannels?.length && (
             <div className='mb-2 '>
-              <ServerSection 
-               channelType={ChannelType.TEXT}
-               role={role}
-               sectionType={"channels"}
-               label='Text Channels'
-               server={server}
+              <ServerSection
+                channelType={ChannelType.TEXT}
+                role={role}
+                sectionType={"channels"}
+                label='Text Channels'
+                server={server}
               />
+              {
+                textChannels?.map((channel) => (
+
+                  <ServerChannel key={channel.id} channel={channel} server={server} role={role} />
+
+                ))
+              }
             </div>
           )
         }
-        {
-          textChannels?.map((channel)=>(
-            <ServerChannel />
-          ))
-        }
+
       </ScrollArea>
     </div>
   )
