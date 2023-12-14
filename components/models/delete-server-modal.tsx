@@ -32,8 +32,8 @@ export const DeleteServerModal = () => {
       setIsLoading(true)
       const response = await axios.delete(`/api/servers/${server?.id}`);
       
-      onClose();
       router.refresh();
+      // onClose();
       router.push("/");
     }
     catch (error) {

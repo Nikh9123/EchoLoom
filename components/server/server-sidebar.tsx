@@ -1,13 +1,28 @@
 import React from 'react'
 import { redirect } from 'next/navigation';
-import { ChannelType } from '@prisma/client';
+import { ChannelType, MemberRole } from '@prisma/client';
+import { Hash, Mic, ShieldAlertIcon, ShieldCheck, User, Video } from 'lucide-react';
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db';
 import ServerHeader from './server-header';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import ServerSearch from './server-search';
 
 interface ServerSidebarProps {
   serverId: string
+}
+
+const iconMap = {
+  [ChannelType.TEXT]: <Hash className='mr-2 w-4 h-4' />,
+  [ChannelType.AUDIO]: <Mic className='mr-2 w-4 h-4' />,
+  [ChannelType.VIDEO]: <Video className='mr-2 w-4 h-4' />
+}
+
+const roleIconMap = {
+  [MemberRole.ADMIN]: <ShieldAlertIcon className='mr-2 w-4 h-4 text-rose-500' />,
+  [MemberRole.MODERATOR]: <ShieldCheck className='mr-2 w-4 h-4 text-indigo-700' />,
+  [MemberRole.GUEST]: <User className='mr-2 w-4 h-4 text-slate-500' />
 }
 
 const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
@@ -16,7 +31,7 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
 
   if (!profile) {
     redirect("/");
-  }
+  } 
 
   const server = await db.server.findUnique({
     where: {
@@ -40,7 +55,6 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   });
 
   //seprating channels
-
   const textChannels = server?.channels.filter((channel) => channel.type === ChannelType.TEXT);
   const audioChannels = server?.channels.filter((channel) => channel.type === ChannelType.AUDIO);
   const videoChannels = server?.channels.filter((channel) => channel.type === ChannelType.VIDEO);
@@ -62,6 +76,52 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
     <div className=' flex flex-col h-full text-primary
     w-full dark:bg-[rgb(43,45,49)] bg-[#F2F3F5]'>
       <ServerHeader server={server} role={role} />
+      <ScrollArea
+        className='flex px-3'>
+        <div className='mt-2'>
+          <ServerSearch
+            data={[
+              {
+                label: "Text Channels",
+                type: "channel",
+                data: textChannels?.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type]
+                }))
+              },
+              {
+                label: "Voice Channels",
+                type: "channel",
+                data: audioChannels?.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type]
+                }
+                ))
+              },
+              {
+                label: "Video Channels",
+                type: "channel",
+                data: videoChannels?.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type]
+                }
+                ))
+              },
+              {
+                label :"Members",
+                type:"member",
+                data : members?.map((member)=>({
+                  id : member.id,
+                  name : member.profile.name,
+                  icon : roleIconMap[member.role]
+                }))
+              }
+            ]} />
+        </div>
+      </ScrollArea>
     </div>
   )
 }
