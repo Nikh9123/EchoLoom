@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 	try {
 		const profile = await currentProfile();
 
-		// cextract server id
+		// extract server id
 		const { searchParams } = new URL(req.url);
 		const serverId = searchParams.get("serverId");
 

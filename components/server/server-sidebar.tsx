@@ -8,6 +8,8 @@ import { db } from '@/lib/db';
 import ServerHeader from './server-header';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ServerSearch from './server-search';
+import { Separator } from '@/components/ui/separator';
+import ServerSection from './server-section';
 
 interface ServerSidebarProps {
   serverId: string
@@ -121,6 +123,25 @@ const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
               }
             ]} />
         </div>
+        <Separator className='bg-zinc-200 dark:bg-zinc-700 rounded-md my-1'/>
+        {//textChannels?.length is now a boolean
+          !!textChannels?.length  && (
+            <div className='mb-2 '>
+              <ServerSection 
+               channelType={ChannelType.TEXT}
+               role={role}
+               sectionType={"channels"}
+               label='Text Channels'
+               server={server}
+              />
+            </div>
+          )
+        }
+        {
+          textChannels?.map((channel)=>(
+            <ServerChannel />
+          ))
+        }
       </ScrollArea>
     </div>
   )
