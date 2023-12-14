@@ -1,4 +1,9 @@
 "use client";
+import axios from "axios";
+import qs from "query-string";
+import {useRouter } from "next/navigation";
+import { useState } from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -8,36 +13,40 @@ import {
   DialogTitle
 } from "@/components/ui/dialog"
 
-import axios from "axios";
-import { useModal } from "@/hooks/use-modal-store";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
+import { useModal } from "@/hooks/use-modal-store";
 import { Button } from "@/components/ui/button";
 
 
-export const DeleteServerModal = () => {
+export const DeleteChannelModal = () => {
 
   const { isOpen, onClose, type, data } = useModal();
-  const router = useRouter()
+  const router = useRouter();
 
-  const isModelOpen = isOpen && type === "deleteServer";
+  const isModelOpen = isOpen && type === "deleteChannel";
 
-  const server = data?.server;
-
+  const {server, channel} = data ;
   const [isLoading, setIsLoading] = useState(false);
-
-  const deleteServer = async () => {
+  
+  const deleteChannel = async () => {
     try {
       setIsLoading(true)
-      const response = await axios.delete(`/api/servers/${server?.id}`);
+
+      const url = qs.stringifyUrl({
+        url : `/api/channels/${channel?.id}`,
+        query:{
+          serverId : server?.id 
+        }
+      })
+
+      const response = await axios.delete(url);
       
+      onClose();
       router.refresh();
-      // onClose();
-      router.push("/");
+      router.push(`/servers/${server?.id}`);
     }
     catch (error) {
-      console.log("❌❌ error from delete-server-modal : ", error)
+      console.log("❌❌ error from delete-channel-modal : ", error)
     }
     finally {
       setIsLoading(false);
@@ -49,12 +58,12 @@ export const DeleteServerModal = () => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden ">
         <DialogHeader className="pt-6 px-6 pb-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Delete Server
+            Delete Channel
           </DialogTitle>
           <DialogDescription className="text-center text-zinc-500 text-xl font-semibold">
             Are you sure you want to Delete <br />
-            <span className="font-semibold text-indigo-500"> {server?.name} ❓</span> <br />
-            <span className=" text-lg font-semibold" >Your all chats will be deleted permanently ⚠️</span>
+            <span className="font-semibold text-indigo-500">#{channel?.name} ❓</span> <br />
+            <span className=" text-lg font-semibold" >This channel chats will be deleted permanently ⚠️</span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="bg-gray-100 px-6 py-4">
@@ -70,7 +79,7 @@ export const DeleteServerModal = () => {
             <Button
               disabled={isLoading}
               variant="primary"
-              onClick={deleteServer}
+              onClick={deleteChannel}
             >
               Confirm
             </Button>
