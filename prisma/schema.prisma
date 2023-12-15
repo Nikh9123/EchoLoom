@@ -58,6 +58,8 @@ model Member{
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
 
+  messages Message[]
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -82,6 +84,8 @@ model Channel{
   serverId String
   server Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
   
+  messages Message[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -89,3 +93,22 @@ model Channel{
   @@index([serverId])
 }
 
+model Message {
+  id String @id @default(uuid())
+  content String @db.Text //for allowing large text(messages)
+
+  fileUrl String? @db.Text // we may have any file url or image url(=> String?)
+
+  memberId String
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  channelId String 
+  channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade)  
+  
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  @@index([channelId])
+  @@index([memberId])
+
+}
