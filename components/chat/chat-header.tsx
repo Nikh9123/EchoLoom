@@ -9,6 +9,7 @@ interface ChatHeaderProps {
 
 }
 
+// ChatHeader component
 export const ChatHeader = ({
   serverId, name, type, imageUrl
 }: ChatHeaderProps) => {
