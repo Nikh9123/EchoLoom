@@ -59,7 +59,7 @@ const createNewConversation = async (
 		return await db.conversation.create({
 			data: {
 				memberOneId: memberOneId,
-				memberTwoId: memberOneId,
+				memberTwoId: memberTwoId,
 			},
 			include: {
 				memberOne: {
