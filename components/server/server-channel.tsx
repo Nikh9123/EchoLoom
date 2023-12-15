@@ -8,7 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { ActionToolTip } from '@/components/action-tooltip';
-import { useModal } from '@/hooks/use-modal-store';
+import { ModelType, useModal } from '@/hooks/use-modal-store';
 
 interface ServerChannelProps {
   channel: Channel;
@@ -34,11 +34,17 @@ const ServerChannel = ({
 
   const Icon = iconMap[channel.type];
 
+  const onClick = () =>{
+    router.push(`/servers/${params?.serverId}/channels/${channel?.id}`)
+  }
 
-
+  const onAction = (e : React.MouseEvent, action : ModelType) => {
+    e.stopPropagation();
+    onOpen(action, {channel, server})
+  }
   return (
     <button
-      onClick={() => { }}
+      onClick={onClick}
       
       className={
         cn(
@@ -65,11 +71,11 @@ const ServerChannel = ({
         <div className=' ml-auto flex items-center gap-x-2'>
           <ActionToolTip label="Edit" >
             <Edit className='hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition ' 
-            onClick={()=> onOpen("editChannel", {channel, server})}/>
+            onClick={(e)=> onAction(e, "editChannel")}/>
           </ActionToolTip>
           <ActionToolTip label="delete" >
             <Trash className='hidden group-hover:block w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition ' 
-            onClick={() => onOpen("deleteChannel", { channel, server })}
+            onClick={(e) => onAction(e, "deleteChannel")}
             />
           </ActionToolTip>
         </div>

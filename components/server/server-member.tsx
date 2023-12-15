@@ -30,7 +30,10 @@ const ServerMember = ({
   const router = useRouter();
 
   const icon = roleIconMap[member.role]
-
+  
+  const onClick = () => {
+    router.push(`/servers/${params?.serverId}/conversations/${member?.id}`)
+  }
 
   return (
     <button className={
@@ -39,7 +42,9 @@ const ServerMember = ({
         params?.memberId === member.id && 
         " bg-zinc-700/20 dark:bg-zinc-700"
       )
-    }>
+    }
+    onClick={onClick}
+    >
       <UserAvatar src={member.profile.imageUrl} 
       className="h-8 w-8 md:h-8 md:w-8"
       />
