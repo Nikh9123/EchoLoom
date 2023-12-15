@@ -9,29 +9,21 @@ export const getOrCreateConversation = async (
 	memberOneId: string,
 	memberTwoId: string
 ) => {
-	try{
-    if (!memberOneId || !memberTwoId) return null;
-
-	//1. check if the conversation already exists between the two members
 	let conversation =
 		(await findConversation(memberOneId, memberTwoId)) ||
 		(await findConversation(memberTwoId, memberOneId));
 
-	//2. if the conversation does not exist between any of them(memberOne to memberTwo || memberTwo to memberOne), then create a new conversation
 	if (!conversation) {
 		conversation = await createNewConversation(memberOneId, memberTwoId);
 	}
+
 	return conversation;
-}
-catch(error){
-  console.log("❌❌❌ error from lib/conversation.ts => getOrCreateConversation",error)
-  return null;
-}
 };
 
 //1. create findConversation function
 const findConversation = async (memberOneId: string, memberTwoId: string) => {
 	try {
+		
 		return await db.conversation.findFirst({
 			where: {
 				AND: [{ memberOneId: memberOneId }, { memberTwoId: memberTwoId }],

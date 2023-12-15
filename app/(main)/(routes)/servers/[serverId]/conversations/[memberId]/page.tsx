@@ -49,8 +49,8 @@ const ConversationMemberIdPage = async({
   
   //3. find the member that is not the current member
   const otherMember = memberOne.id === profile?.id ? memberTwo : memberOne ;
-
-
+  
+  console.log(otherMember.id)
 
   return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full ">
