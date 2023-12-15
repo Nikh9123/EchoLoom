@@ -39,8 +39,8 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
           )
         } />
         <div className={cn(
-          "relative group flex mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden items-center justify-center ",
-          params?.serverId === id && "bg-primary/10 text-primary rounded-[16px]",
+          "relative group flex mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden",
+          params?.serverId === id && "bg-primary/10 text-primary rounded-[16px]"
         )}>
           <Image
             alt="channel"

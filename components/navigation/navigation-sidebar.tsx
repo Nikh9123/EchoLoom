@@ -38,7 +38,7 @@ const NavigationSideBar = async (props: Props) => {
       <ScrollArea className='flex-1 w-full'>
         {
           servers.map(server => (
-            <div key={server.id} className='text-sm mb-4'>
+            <div key={server.id} className='mb-4'>
               {/* {
                 // trim the server name if it's too long
                 server.name.length > 15 ? `${server.name.substring(0, 15)}...` : server.name
@@ -56,7 +56,7 @@ const NavigationSideBar = async (props: Props) => {
           appearance={
             {
               elements:{
-                avatarBox:"h-[48px] w-[48px] group-hover:rounded-[16px] transition-all overflow-hidden items-center justify-center ",
+                avatarBox:"h-[48px] w-[48px] ",
               }
             }
           }
