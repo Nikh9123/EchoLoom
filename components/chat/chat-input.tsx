@@ -1,6 +1,7 @@
 "use client";
 
 import * as z from "zod";
+import qs from "query-string";
 import { useForm } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 
@@ -13,6 +14,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Plus, Smile } from "lucide-react";
+import axios from "axios";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -45,7 +47,22 @@ const ChatInput = ({
 
   const onSubmit = async (values : z.infer<typeof formSchema>) => {
     console.log(values);
-  }
+
+    try {
+      const url = qs.stringifyUrl({
+        url: apiUrl,
+        query
+      });
+      
+      console.log("url : ", url);
+      
+      await axios.post(url, values);
+
+    } catch (error) {
+      console.log("error from chat-input.tsx", error);
+    }
+  }  
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -69,6 +86,8 @@ const ChatInput = ({
                 disabled={isLoading}
                 className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0
                 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                placeholder={`Message ${type === "conversation" ? name : "#" +name}  `}
+                {...field}
                 />
 
                 <div className="absolute top-7 right-8"> 
