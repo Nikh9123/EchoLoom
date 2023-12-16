@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Plus, Smile } from "lucide-react";
 import axios from "axios";
 import { useModal } from "@/hooks/use-modal-store";
+import EmojiPicker from "../emoji-picker";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -93,7 +94,7 @@ const ChatInput = ({
                 />
 
                 <div className="absolute top-7 right-8"> 
-                <Smile />
+                <EmojiPicker />
                 </div>
 
               </div>
