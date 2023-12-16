@@ -3,7 +3,7 @@
 import * as z from "zod";
 import qs from "query-string";
 import { useForm } from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 import {
   Form,
@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { Plus, Smile } from "lucide-react";
+import { Plus } from "lucide-react";
 import axios from "axios";
 import { useModal } from "@/hooks/use-modal-store";
-import EmojiPicker from "../emoji-picker";
+import EmojiPicker from "@/components/emoji-picker";
+import { useRouter } from "next/navigation";
 
 interface ChatInputProps {
   apiUrl: string;
@@ -38,17 +39,18 @@ const ChatInput = ({
   query
 }: ChatInputProps) => {
 
-  const {onOpen, onClose} = useModal();
+  const { onOpen, onClose } = useModal();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver : zodResolver(formSchema),
-    defaultValues:{
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       content: "",
     }
   })
 
-  const isLoading = form.formState.isSubmitting ;
+  const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values : z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
 
     try {
@@ -56,51 +58,53 @@ const ChatInput = ({
         url: apiUrl,
         query
       });
-      
-      console.log("url : ", url);
-      
-      await axios.post(url, values);
 
+      console.log("url : ", url);
+
+      await axios.post(url, values);
+      
+      form.reset() ;
+      router.refresh();
     } catch (error) {
       console.log("error from chat-input.tsx", error);
     }
-  }  
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
-        control={form.control}
-        name="content"
-        render={ ({field}) => (
-          <FormItem>
-            <FormControl>
-              <div className="relative p-4 pb-6 ">
-                <button
-                type="button"
-                onClick={()=>onOpen("messageFile", {apiUrl,query})}
-                className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="relative p-4 pb-6 ">
+                  <button
+                    type="button"
+                    onClick={() => onOpen("messageFile", { apiUrl, query })}
+                    className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full
                 p-1 flex items-center justify-center"
-                >
-                  <Plus className="text-white dark:text-[#313338]"/>
+                  >
+                    <Plus className="text-white dark:text-[#313338]" />
 
-                </button>
-                <Input 
-                disabled={isLoading}
-                className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0
+                  </button>
+                  <Input
+                    disabled={isLoading}
+                    className="px-14 py-6 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0
                 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
-                placeholder={`Message ${type === "conversation" ? name : "#" +name}  `}
-                {...field}
-                />
+                    placeholder={`Message ${type === "conversation" ? name : "#" + name}  `}
+                    {...field}
+                  />
 
-                <div className="absolute top-7 right-8"> 
-                <EmojiPicker />
+                  <div className="absolute top-7 right-8">
+                    <EmojiPicker onChange={(emoji: string) => field.onChange(`${field.value} ${emoji}`)} />
+                  </div>
+
                 </div>
-
-              </div>
-            </FormControl>
+              </FormControl>
             </FormItem >
-        )}
+          )}
         >
 
         </FormField>
