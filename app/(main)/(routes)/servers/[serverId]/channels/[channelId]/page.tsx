@@ -40,23 +40,32 @@ const ChannelIdPage = async ({
     }
   })
 
-  if(!channel || !member) {
+  if (!channel || !member) {
     return redirect('/');
   }
 
   return (
     <div
-    className="bg-white dark:bg-[#313338] flex flex-col h-full"
+      className="bg-white dark:bg-[#313338] flex flex-col h-full"
     >
-      <ChatHeader type="channel" name={channel.name} serverId={channel.serverId}/>
+      <ChatHeader type="channel" name={channel.name} serverId={channel.serverId} />
 
       <div className="flex-1">
         Future chats
       </div>
-      <ChatInput />
+      <ChatInput
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/socket/messages"
+        query={{
+          channelId: channel.id,
+          serverId: channel.serverId
+        }}
+      />
 
     </div>
   )
 }
 
 export default ChannelIdPage;
+//8:29:00
