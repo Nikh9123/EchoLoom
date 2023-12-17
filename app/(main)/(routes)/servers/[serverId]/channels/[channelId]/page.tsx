@@ -53,10 +53,10 @@ const ChannelIdPage = async ({
       <ChatHeader type="channel" name={channel.name} serverId={channel.serverId} />
 
       <ChatMessages
-        type="channel"
+        member={member}
         name={channel.name}
         chatId={channel.id}
-        member={member}
+        type="channel"
         apiUrl="/api/messages"
         socketUrl="/api/socket/messages"
         socketQuery={{
@@ -64,7 +64,7 @@ const ChannelIdPage = async ({
           serverId: channel.serverId,
         }}
         paramKey="channelId"
-        paramValue="channel.id"
+        paramValue={channel.id}
       />
 
       <ChatInput
