@@ -1,9 +1,15 @@
-"use client" ;
-import { Member, Message, Profile } from '@prisma/client';
+"use client";
 import React, { Fragment } from 'react'
+import { Member, Message, Profile } from '@prisma/client';
+import { Loader2, ServerCrashIcon } from 'lucide-react';
+import { format } from "date-fns";
+
 import ChatWelCome from './chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
-import { Loader2, ServerCrashIcon } from 'lucide-react';
+import { ChatItem } from './chat-item';
+
+
+const DATE_FORMAT = "d MMM yyyy, HH:mm"
 
 interface ChatMessagesProps {
   name: string;
@@ -16,9 +22,10 @@ interface ChatMessagesProps {
   paramValue: string;
   type: "channel" | "conversation";
 }
+
 type MessageWithMemberWithProfile = Message & {
-  member : Member & {
-    profile : Profile
+  member: Member & {
+    profile: Profile
   }
 }
 
@@ -33,7 +40,7 @@ const ChatMessages = ({
   paramValue,
   type,
 }: ChatMessagesProps) => {
-  
+
   const queryKey = `chat:${chatId}`
 
   const {
@@ -48,7 +55,7 @@ const ChatMessages = ({
     paramKey,
     paramValue,
   })
-  if(status === "loading"){
+  if (status === "loading") {
     return (
       <div className='flex flex-col flex-1 justify-center items-center'>
         <Loader2 className='w-8 h-8 text-zinc-500 animate-spin my-4' />
@@ -58,7 +65,7 @@ const ChatMessages = ({
       </div>
     )
   }
-  if(status === "error"){
+  if (status === "error") {
     return (
       <div className='flex flex-col flex-1 justify-center items-center'>
         <ServerCrashIcon className='w-8 h-8 text-zinc-500 animate-spin my-4' />
@@ -74,16 +81,28 @@ const ChatMessages = ({
     >
       <div className='flex-1' />
       <ChatWelCome
-      type={type}
-      name={name}
+        type={type}
+        name={name}
       />
       <div className='flex flex-col-reverse mt-auto '>
-        {data?.pages?.map( (group ,i)=>(
+        {data?.pages?.map((group, i) => (
           <Fragment
-          key={i}
+            key={i}
           >
-            {group.items.map((message : MessageWithMemberWithProfile) => (
-              <ChatItem />
+            {group.items.map((message: MessageWithMemberWithProfile) => (
+              <ChatItem key={message.id}
+                currentMember={member}
+                member={message.member}
+                id={message.id}
+                content={message.content}
+                fileUrl={message.fileUrl}
+                deleted={message.deleted}
+                timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
+                isUpdated={message.updatedAt !== message.createdAt}
+                socketUrl={socketUrl}
+                socketQuery={socketQuery}
+
+              />
             ))}
           </Fragment>
         ))}
