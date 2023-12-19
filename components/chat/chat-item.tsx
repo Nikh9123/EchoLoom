@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { ActionToolTip } from "@/components/action-tooltip";
 import { set } from "date-fns";
+import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
   id: string
@@ -63,8 +64,7 @@ export const ChatItem = ({
 }: ChatItemProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, SetIsDeleting] = useState(false);
-
+  const { onClose, onOpen } = useModal();
   //create form
   const form = useForm<z.infer<typeof formSchema>>({
 
@@ -78,10 +78,10 @@ export const ChatItem = ({
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values : z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
-        url : `${socketUrl}/${id}`,
+        url: `${socketUrl}/${id}`,
         query: socketQuery
       });
 
@@ -92,18 +92,18 @@ export const ChatItem = ({
       //log the error with  file name 
       console.log("❌❌❌ error in components/chat/chat-item.tsx", error);
     }
-    
+
   }
 
   useEffect(() => {
-    const handleKeyDown = (e : any) =>{
-      if(e.key === "Escape" || e.keyCode === 27){
+    const handleKeyDown = (e: any) => {
+      if (e.key === "Escape" || e.keyCode === 27) {
         setIsEditing(false);
       }
     }
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  },[]);
+  }, []);
 
   useEffect(() => {
     form.reset({
@@ -227,9 +227,9 @@ export const ChatItem = ({
                     size={"sm"}
                     variant={"primary"}
                     disabled={isLoading}
-                    >
-                      Save
-                    </Button>
+                  >
+                    Save
+                  </Button>
                 </form>
                 <span className="text-[10px] mt-1 text-zinc-400">
                   Press esc to cancel, enter to save
@@ -260,6 +260,7 @@ export const ChatItem = ({
           {canDeleteMessage && (
             <ActionToolTip label="Delete">
               <Trash2
+                onClick={() => onOpen("deleteMessage", { apiUrl: `${socketUrl}/${id}`, query: socketQuery })}
                 className="cursor-pointer transition hover:text-zinc-600 ml-auto w-4 h-4 text-xs text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 "
               />
             </ActionToolTip>
