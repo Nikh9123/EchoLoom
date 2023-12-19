@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment,useRef, ElementRef } from 'react'
+import React, { Fragment, useRef, ElementRef } from 'react'
 import { Member, Message, Profile } from '@prisma/client';
 import { Loader2, ServerCrashIcon } from 'lucide-react';
 import { format } from "date-fns";
@@ -42,11 +42,13 @@ const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
 
-  const queryKey = `chat:${chatId}` ;
-  const addKey = `chat:${chatId}:messages` ;
-  const updateKey = `chat:${chatId}:messages:update` ;
-  
-  const 
+  const queryKey = `chat:${chatId}`;
+  const addKey = `chat:${chatId}:messages`;
+  const updateKey = `chat:${chatId}:messages:update`;
+
+  const chatRef = useRef<ElementRef<"div">>(null);
+  const bottomRef = useRef<ElementRef<"div">>(null);
+
   const {
     data,
     fetchNextPage,
@@ -86,19 +88,40 @@ const ChatMessages = ({
   }
   return (
     <div
+      ref={chatRef}
       className='flex-1 flex flex-col py-4 overflow-y-auto'
     >
-      <div className='flex-1' />
-      <ChatWelCome
-        type={type}
-        name={name}
-      />
+      {!hasNextPage && <div className='flex-1' />}
+      {
+        !hasNextPage && <ChatWelCome
+          type={type}
+          name={name}
+        />
+      }
+      {
+        hasNextPage && (
+          <div className='flex justify-center'>
+            {isFetchingNextPage ?
+              (
+                <Loader2 className='h-6 w-6 text-zinc-500  animate-spin my-4' />
+              ) : (
+                <button
+                  onClick={() => fetchNextPage()}
+                  className='text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 my-4 transition'
+                >
+                  Load previous messages...
+                </button>
+              )
+            }
+          </div>
+        )
+      }
       <div className='flex flex-col-reverse mt-auto '>
         {data?.pages?.map((group, i) => (
           <Fragment
             key={i}
           >
-            {group.items.map((message: MessageWithMemberWithProfile) => (
+            {group?.items?.map((message: MessageWithMemberWithProfile) => (
               <ChatItem key={message.id}
                 currentMember={member}
                 member={message.member}
@@ -115,6 +138,8 @@ const ChatMessages = ({
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
+
     </div>
   )
 }
