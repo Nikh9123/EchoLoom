@@ -3,8 +3,10 @@
 import * as z from "zod";
 import axios from "axios";
 import qs from "query-string";
-import { useEffect, useState } from "react";
+import { set } from "date-fns";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Member, MemberRole, Message, Profile } from "@prisma/client";
 import { Delete, Edit, File, ShieldAlert, ShieldCheck, Trash2, User } from "lucide-react";
@@ -20,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { ActionToolTip } from "@/components/action-tooltip";
-import { set } from "date-fns";
 import { useModal } from "@/hooks/use-modal-store";
 
 interface ChatItemProps {
@@ -64,7 +65,15 @@ export const ChatItem = ({
 }: ChatItemProps) => {
 
   const [isEditing, setIsEditing] = useState(false);
-  const { onClose, onOpen } = useModal();
+  const { onOpen } = useModal();
+  const params = useParams();
+  const router = useRouter();
+
+  const onMemberClick = () => {
+    if(member.id === currentMember.id) return;
+    router.push(`/servers/${params?.serverId}/conversations/${member.id}`);
+  }
+
   //create form
   const form = useForm<z.infer<typeof formSchema>>({
 
@@ -132,14 +141,16 @@ export const ChatItem = ({
     p-4 transition w-full">
       <div className="group flex gap-x-2 items-start w-full ">
         <div
+          onClick={onMemberClick}
           className="cursor-pointer hover:drop-shadow-md transition"
         >
-          <UserAvatar src={member.profile.imageUrl} />
+          <UserAvatar src={member.profile.imageUrl}/>
         </div>
         <div className="flex flex-col w-full">
           <div className="flex items-center gap-x-2">
             <div className="flex items-center">
-              <p className="font-semibold text-sm hover:underline cursor-pointer">
+              <p onClick={onMemberClick}
+              className="font-semibold text-sm hover:underline cursor-pointer">
                 {member.profile.name}
               </p>
               <ActionToolTip label={member.role}>

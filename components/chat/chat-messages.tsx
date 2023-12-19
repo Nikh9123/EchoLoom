@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment } from 'react'
+import React, { Fragment,useRef, ElementRef } from 'react'
 import { Member, Message, Profile } from '@prisma/client';
 import { Loader2, ServerCrashIcon } from 'lucide-react';
 import { format } from "date-fns";
@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import ChatWelCome from './chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
 import { ChatItem } from './chat-item';
+import { useChatSocket } from '@/hooks/use-chat-socket';
 
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm"
@@ -41,8 +42,11 @@ const ChatMessages = ({
   type,
 }: ChatMessagesProps) => {
 
-  const queryKey = `chat:${chatId}`
-
+  const queryKey = `chat:${chatId}` ;
+  const addKey = `chat:${chatId}:messages` ;
+  const updateKey = `chat:${chatId}:messages:update` ;
+  
+  const 
   const {
     data,
     fetchNextPage,
@@ -54,6 +58,11 @@ const ChatMessages = ({
     apiUrl,
     paramKey,
     paramValue,
+  });
+  useChatSocket({
+    queryKey,
+    addKey,
+    updateKey
   })
   if (status === "loading") {
     return (
@@ -101,7 +110,6 @@ const ChatMessages = ({
                 isUpdated={message.updatedAt !== message.createdAt}
                 socketUrl={socketUrl}
                 socketQuery={socketQuery}
-
               />
             ))}
           </Fragment>
