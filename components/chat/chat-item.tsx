@@ -1,12 +1,26 @@
 "use client";
 
+import * as z from "zod";
+import axios from "axios";
+import qs from "query-string";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Member, MemberRole, Message, Profile } from "@prisma/client";
+import { Delete, Edit, File, ShieldAlert, ShieldCheck, Trash2, User } from "lucide-react";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
 import { ActionToolTip } from "@/components/action-tooltip";
-import { Edit, File, ShieldAlert, ShieldCheck, User } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { set } from "date-fns";
 
 interface ChatItemProps {
   id: string
@@ -29,6 +43,12 @@ const roleIconMap = {
   "ADMIN": <ShieldAlert className="h-4 w-4 ml-2 text-rose-500 " />,
 }
 
+//create form schema
+const formSchema = z.object({
+  //the content of the message where z.string is the type of the content
+  content: z.string().min(1),
+})
+
 export const ChatItem = ({
   id,
   content,
@@ -45,6 +65,53 @@ export const ChatItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, SetIsDeleting] = useState(false);
 
+  //create form
+  const form = useForm<z.infer<typeof formSchema>>({
+
+    //we are passing formSchema to zodResolver because we want to validate the form
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content: content
+    }
+  })
+  // const [isLoading , setIsLoading] = useState(false);
+
+  const isLoading = form.formState.isSubmitting;
+
+  const onSubmit = async (values : z.infer<typeof formSchema>) => {
+    try {
+      const url = qs.stringifyUrl({
+        url : `${socketUrl}/${id}`,
+        query: socketQuery
+      });
+
+      const response = await axios.patch(url, values);
+      form.reset();
+      setIsEditing(false);
+    } catch (error) {
+      //log the error with  file name 
+      console.log("❌❌❌ error in components/chat/chat-item.tsx", error);
+    }
+    
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e : any) =>{
+      if(e.key === "Escape" || e.keyCode === 27){
+        setIsEditing(false);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  },[]);
+
+  useEffect(() => {
+    form.reset({
+      content: content
+
+    })
+  }, [content, form])
+
   const fileType = fileUrl?.split('.').pop();
 
 
@@ -56,6 +123,7 @@ export const ChatItem = ({
   const canEditMessage = !deleted && isOwner && !fileUrl;
   const isPDF = fileType === "pdf" && fileUrl;
   const isImage = !isPDF && fileUrl;
+
 
 
 
@@ -130,21 +198,72 @@ export const ChatItem = ({
                   )}
               </p>
             )}
+          {
+            !fileUrl && isEditing && (
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}
+                  className="flex gap-x-2 w-full items-center pt-2"
+                >
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormControl>
+                          <div className=" relative w-full">
+                            <Input
+                              placeholder="Edited a message"
+                              className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0
+                              focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
+                              {...field}
+                              disabled={isLoading}
+                            />
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    size={"sm"}
+                    variant={"primary"}
+                    disabled={isLoading}
+                    >
+                      Save
+                    </Button>
+                </form>
+                <span className="text-[10px] mt-1 text-zinc-400">
+                  Press esc to cancel, enter to save
+                </span>
+              </Form>
+            )
+          }
         </div>
       </div>
       {canDeleteMessage && (
         <div className="hidden group-hover:flex items-center gap-x-2
         absolute p-1 -top-2 right-5 bg-white dark:bg-zinc-800 border 
         rounded-sm">
+          {canEditMessage && (
+            <ActionToolTip label="Edit">
+              <Edit
+                onClick={() => setIsEditing(true)}
+                className="cursor-pointer transition hover:text-zinc-600 ml-auto w-4 h-4 text-xs text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 "
+              />
+            </ActionToolTip>
+          )}
+          {/* add a thin line between both edit and edit icon*/}
           {
-            canEditMessage && (
-              <ActionToolTip label="Edit">
-                <Edit
-                  className="cursor-pointer transition hover:text-zinc-600 ml-auto w-4 h-4 text-xs text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 "
-                />
-              </ActionToolTip>
+            !isImage && !isPDF && canEditMessage && canDeleteMessage && (
+              <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-700"></div>
             )
           }
+          {canDeleteMessage && (
+            <ActionToolTip label="Delete">
+              <Trash2
+                className="cursor-pointer transition hover:text-zinc-600 ml-auto w-4 h-4 text-xs text-zinc-500 dark:text-zinc-400 dark:hover:text-zinc-300 "
+              />
+            </ActionToolTip>
+          )}
         </div>
       )}
     </div>
