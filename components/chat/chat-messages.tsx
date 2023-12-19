@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useRef, ElementRef } from 'react'
+import React, { Fragment, useRef, ElementRef, use } from 'react'
 import { Member, Message, Profile } from '@prisma/client';
 import { Loader2, ServerCrashIcon } from 'lucide-react';
 import { format } from "date-fns";
@@ -8,6 +8,7 @@ import ChatWelCome from './chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
 import { ChatItem } from './chat-item';
 import { useChatSocket } from '@/hooks/use-chat-socket';
+import { useChatScroll } from '@/hooks/use-chat-scroll';
 
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm"
@@ -66,6 +67,16 @@ const ChatMessages = ({
     addKey,
     updateKey
   })
+
+ useChatScroll({
+  chatRef,
+  bottomRef,
+  loadMore : fetchNextPage,
+  shouldLoadMore : !isFetchingNextPage && !!hasNextPage,
+  count : data?.pages?.[0]?.items?.length ?? 0,
+
+ })
+
   if (status === "loading") {
     return (
       <div className='flex flex-col flex-1 justify-center items-center'>

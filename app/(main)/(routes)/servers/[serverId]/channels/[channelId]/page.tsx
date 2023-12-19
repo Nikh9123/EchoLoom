@@ -75,6 +75,7 @@ const ChannelIdPage = async ({
           channelId: channel.id,
           serverId: channel.serverId,
         }}
+        
       />
 
     </div>
