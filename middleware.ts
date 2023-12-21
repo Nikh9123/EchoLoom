@@ -5,7 +5,8 @@ import { authMiddleware } from "@clerk/nextjs";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 
 export default authMiddleware({
-  publicRoutes:["/api/uploadthing"] // allow public access to this route for file uploads
+  publicRoutes:["/api/uploadthing"], // allow public access to this route for file uploads
+  // ignoredRoutes: ["/((?!api|trpc))(_next.*|.+\.[\w]+$)", "/api/socket/io"]
 });
  
 export const config = {

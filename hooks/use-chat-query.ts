@@ -26,7 +26,6 @@ export const useChatQuery = ({
         [paramKey]: paramValue,
       }
     }, { skipNull: true });
-
     const res = await fetch(url);
     return res.json();
   };
