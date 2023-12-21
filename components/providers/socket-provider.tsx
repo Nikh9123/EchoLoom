@@ -1,3 +1,4 @@
+// socket-provider.tsx
 "use client";
 
 import {
@@ -5,29 +6,27 @@ import {
   useContext,
   useEffect,
   useState,
-  ReactNode
 } from "react";
-
 import { io as ClientIO } from "socket.io-client";
 
 type SocketContextType = {
   socket: any | null;
   isConnected: boolean;
-}
+};
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
-  isConnected: false
+  isConnected: false,
 });
 
 export const useSocket = () => {
   return useContext(SocketContext);
-}
+};
 
 export const SocketProvider = ({
-  children
+  children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -35,7 +34,7 @@ export const SocketProvider = ({
   useEffect(() => {
     const socketInstance = new (ClientIO as any)(process.env.NEXT_PUBLIC_SITE_URL!, {
       path: "/api/socket/io",
-      addTrailingSlash: false
+      addTrailingSlash: false,
     });
 
     socketInstance.on("connect", () => {
@@ -49,16 +48,13 @@ export const SocketProvider = ({
     setSocket(socketInstance);
 
     return () => {
-      socketInstance.close();
-    }
-
+      socketInstance.disconnect();
+    };
   }, []);
 
-  return <SocketContext.Provider
-    value={{
-      socket,
-      isConnected
-    }}>
-    {children}
-  </SocketContext.Provider>
-}
+  return (
+    <SocketContext.Provider value={{ socket, isConnected }}>
+      {children}
+    </SocketContext.Provider>
+  );
+};
