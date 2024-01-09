@@ -1,8 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# EchoLoom
+
+EchoLoom is a Discord clone developed with Next.js, TypeScript, Node.js, and a powerful stack of technologies to deliver a feature-rich and user-friendly real-time communication platform. This project showcases my skills in full-stack web development and my commitment to creating robust, scalable, and innovative solutions.
+
+## Features
+
+- **Real-time Communication:** Utilizes Socket.io for seamless one-to-one and room-based chatting, ensuring a dynamic and interactive user experience.
+- **WebRTC Capabilities:** Integrates LiveKit to enable one-to-one video, audio, and screen sharing, enhancing collaborative possibilities.
+- **Secure Authentication:** Implements Clerk for authentication, providing a secure environment for users, accommodating up to 500 users for free.
+- **Efficient Database Management:** Leverages VercelDB (PostgreSQL), integrated with Prisma and Drizzle ORM, for streamlined database operations, ensuring data integrity and efficient retrieval.
+- **Structured Database Maintenance:** Utilizes Prisma and Drizzle ORM for maintaining a structured and organized database schema, contributing to scalability and maintainability.
+
+## Tech Stack
+
+- **Next.js:** Enables seamless full-stack development with automatic reloading and efficient file routing.
+- **TypeScript:** Enhances code maintainability and reduces potential runtime errors through static typing.
+- **Socket.io:** Facilitates real-time communication for interactive user experiences.
+- **LiveKit (WebRTC):** Powers one-to-one video, audio, and screen sharing capabilities.
+- **Clerk:** Provides secure authentication, accommodating up to 500 users for free.
+- **VercelDB (PostgreSQL):** Chosen for ease of use and seamless integration with Prisma and Drizzle ORM.
+- **Prisma:** Streamlines database maintenance for efficient data storage and retrieval.
+- **Drizzle ORM:** Ensures consistency in database operations, contributing to a structured and organized schema.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository: `git clone https://github.com/nikh9123/EchoLoom.git`
+2. Install dependencies: `npm install`
+3. Configure environment variables.
+4. Run the application: `npm run dev`
+
+
+## First, run the development server:
 
 ```bash
 npm run dev
@@ -16,21 +43,20 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Contribution Guidelines
 
-## Learn More
+Feel free to contribute by forking the repository and creating a pull request. Bug fixes, feature enhancements, and feedback are all welcome!
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is licensed under the [MIT License](LICENSE).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Acknowledgments
 
-## Deploy on Vercel
+Special thanks to the open-source community and the developers behind the technologies used in this project.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Enjoy exploring EchoLoom! If you have any questions or feedback, feel free to reach out.
+
