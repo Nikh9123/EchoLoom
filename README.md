@@ -56,7 +56,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 <img src="./public/Screenshot 2023-12-27 001245.png">
 
 ## Demo Video
-<iframe width="560" height="315" src="https://www.youtube.com/embed/L_2huCWT6SM" frameborder="0" allowfullscreen></iframe>
+[![Demo Video](https://img.youtube.com/vi/L_2huCWT6SM/0.jpg)](https://youtu.be/L_2huCWT6SM)
+
+Click on the image above to watch the demo video.
 
 
 ## Contribution Guidelines
