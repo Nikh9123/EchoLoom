@@ -1,6 +1,14 @@
-# EchoLoom
+<h1 align="center">
+  <br>
+  <a href="https://github.com/Nikh9123/EchoLoom"><img src="./public/4574dc67-1be3-4b0e-aacd-fb3f59ee87c8.gif" alt="EchoLoom" width="200"></a>
+  <br>
+  EchoLoom
+  <br>
+</h1>
 
 EchoLoom is a Discord clone developed with Next.js, TypeScript, Node.js, and a powerful stack of technologies to deliver a feature-rich and user-friendly real-time communication platform. This project showcases my skills in full-stack web development and my commitment to creating robust, scalable, and innovative solutions.
+
+
 
 ## Features
 
@@ -42,6 +50,13 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Screenshots
+<img src ="./public/Screenshot 2023-12-26 215336.png">
+<img src="./public/Screenshot 2023-12-27 001245.png">
+
+## Demo Video
+<iframe width="560" height="315" src="https://www.youtube.com/embed/L_2huCWT6SM" frameborder="0" allowfullscreen></iframe>
 
 
 ## Contribution Guidelines
