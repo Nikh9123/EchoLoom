@@ -4,9 +4,8 @@ import '@livekit/components-styles';
 import {
   LiveKitRoom,
   VideoConference,
-  GridLayout,
-  ParticipantTile,
 } from '@livekit/components-react';
+
 import { useEffect, useState } from 'react';
 import { Channel } from '@prisma/client';
 import { useUser } from '@clerk/nextjs';
@@ -69,5 +68,3 @@ export const MediaRoom = ({
     </LiveKitRoom>
   )
 }
-
-

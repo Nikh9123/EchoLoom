@@ -6,16 +6,12 @@ import { format } from "date-fns";
 
 import ChatWelCome from './chat-welcome';
 import { useChatQuery } from '@/hooks/use-chat-query';
-<<<<<<< HEAD
-import { Loader2 } from 'lucide-react';
-=======
 import { ChatItem } from './chat-item';
 import { useChatSocket } from '@/hooks/use-chat-socket';
 import { useChatScroll } from '@/hooks/use-chat-scroll';
 
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm"
->>>>>>> 1d64d64694c8bd6660e6308a89a3dc5249e59389
 
 interface ChatMessagesProps {
   name: string;
@@ -46,14 +42,6 @@ const ChatMessages = ({
   paramValue,
   type,
 }: ChatMessagesProps) => {
-<<<<<<< HEAD
-  const queryKey = `chat:${chatId}`
-  const {
-    data,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-=======
 
   
   const queryKey = `chat:${chatId}`;
@@ -68,21 +56,11 @@ const ChatMessages = ({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
->>>>>>> 1d64d64694c8bd6660e6308a89a3dc5249e59389
     status
   } = useChatQuery({
     queryKey,
     apiUrl,
     paramKey,
-<<<<<<< HEAD
-    paramValue
-  })
-
-  if (status === "loading") {
-    return (
-      <div className='flex flex-col flex-1 justify-center items-center'>
-        <Loader2  className='w-8 h-8 text-zinc-700 animate-spin my-4'/>
-=======
     paramValue,
   });
   useChatSocket({
@@ -104,15 +82,12 @@ const ChatMessages = ({
     return (
       <div className='flex flex-col flex-1 justify-center items-center'>
         <Loader2 className='w-8 h-8 text-zinc-500 animate-spin my-4' />
->>>>>>> 1d64d64694c8bd6660e6308a89a3dc5249e59389
         <p className='text-xs text-zinc-500 dark:text-zinc-400'>
           Loading messages...
         </p>
       </div>
     )
   }
-<<<<<<< HEAD
-=======
   if (status === "error") {
     return (
       <div className='flex flex-col flex-1 justify-center items-center'>
@@ -123,19 +98,11 @@ const ChatMessages = ({
       </div>
     )
   }
->>>>>>> 1d64d64694c8bd6660e6308a89a3dc5249e59389
   return (
     <div
       ref={chatRef}
       className='flex-1 flex flex-col py-4 overflow-y-auto'
     >
-<<<<<<< HEAD
-      <div className='flex-1' />
-      <ChatWelCome
-        type={type}
-        name={name}
-      />
-=======
       {!hasNextPage && <div className='flex-1' />}
       {
         !hasNextPage && <ChatWelCome
@@ -185,7 +152,6 @@ const ChatMessages = ({
       </div>
       <div ref={bottomRef} />
 
->>>>>>> 1d64d64694c8bd6660e6308a89a3dc5249e59389
     </div>
   )
 }
